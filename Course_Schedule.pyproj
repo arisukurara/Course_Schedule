@@ -24,9 +24,10 @@
     <Compile Include="main.py" />
     <Compile Include="schedule.py" />
     <Compile Include="schedule_item.py" />
+    <Compile Include="search_trees.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="courses.csv" />
+    <Content Include="courses_2023.csv" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -1,13 +1,19 @@
 import csv
 from schedule_item import ScheduleItem
+from search_trees import BSTMap, AVLTreeMap
 
 class Schedule:
-    def __init__(self):
-        self.items = {}
+    def __init__(self, use_avl=False):
+        if use_avl:
+            self.items = AVLTreeMap()
+            self.tree_type = "AVL"
+        else:
+            self.items = BSTMap()
+            self.tree_type = "BST"
 
     def add_entry(self, item):
         key = item.get_key()
-        self.items[key] = item
+        self.items.insert(key, item)
 
     def load_from_csv(self, filename):
         with open(filename, encoding="utf-8-sig") as f:
@@ -49,6 +55,9 @@ class Schedule:
 
                 self.add_entry(item)
 
+    def get_all_items(self):
+        return [item for key, item in self.items.inorder_items()]
+
     def print_header(self):
         print(
             f"{'Subject':<7}"
@@ -64,7 +73,7 @@ class Schedule:
 
     def print(self, items=None):
         if items is None:
-            items = list(self.items.values())
+            items = self.get_all_items()
 
         if len(items) == 0:
             print("No matching classes found.")
@@ -76,15 +85,19 @@ class Schedule:
 
     def find_by_subject(self, subject):
         subject = subject.upper().strip()
-        return [item for item in self.items.values() if item.subject.upper() == subject]
+        return [item for key, item in self.items.inorder_items() 
+                if item.subject.upper() == subject]
 
     def find_by_subject_catalog(self, subject, catalog):
         subject = subject.upper().strip()
         catalog = catalog.strip()
-        return [item for item in self.items.values() 
+        return [item for key, item in self.items.inorder_items() 
                 if item.subject.upper() == subject and item.catalog == catalog]
 
     def find_by_instructor_last_name(self, last):
         last = last.lower().strip()
-        return [item for item in self.items.values() 
+        return [item for key, item in self.items.inorder_items() 
                 if item.instructor and last in item.instructor.split(",")[0].strip().lower()]
+    
+    def get_height(self):
+        return self.items.height()
